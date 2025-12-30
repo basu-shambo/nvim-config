@@ -1,8 +1,13 @@
+local enable_relnum  = require("functions").enable_relnum
+local disable_relnum = require("functions").disable_relnum
+
 vim.cmd("set expandtab")
 vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
 vim.cmd("set textwidth=0")
+vim.opt.clipboard = "unnamedplus"
+
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "*",
     callback = function()
@@ -23,6 +28,12 @@ vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter", "TermOpen" }, {
         end
     end,
 })
+print(disable_relnum)
+vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave" }, {
+  pattern = "*",
+  callback = disable_relnum,
+})
+
 -- Define a custom yank highlight group using a color from your theme
 vim.api.nvim_set_hl(0, "YankHighlight", {
   bg = vim.api.nvim_get_hl_by_name("Visual", true).background,
