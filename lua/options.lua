@@ -2,6 +2,8 @@ local enable_relnum  = require("functions").enable_relnum
 local disable_relnum = require("functions").disable_relnum
 
 vim.cmd("set expandtab")
+vim.cmd("set ignorecase")
+vim.cmd("set smartcase")
 vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
@@ -28,7 +30,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter", "TermOpen" }, {
         end
     end,
 })
-print(disable_relnum)
+
 vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave" }, {
   pattern = "*",
   callback = disable_relnum,
@@ -47,3 +49,27 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
+-- Create a new terminal with a name of shell and a specific name
+vim.api.nvim_create_user_command("Shell", function(opts)
+  if #vim.api.nvim_list_wins() > 1 then
+    vim.cmd("terminal")
+  else
+    vim.cmd("vsplit | terminal")
+  end
+
+  local term_name = opts.args
+
+  if term_name ~= "" then
+    vim.api.nvim_buf_set_name(0, term_name)
+  end
+end, {nargs="?"})
+
+-- Create a shorthand for gemini
+vim.api.nvim_create_user_command("Gemini", function(opts)
+  if #vim.api.nvim_list_wins() > 1 then
+    vim.cmd("terminal gemini")
+  else
+    vim.cmd("vsplit | terminal gemini")
+  end
+  vim.api.nvim_buf_set_name(0, "gemini")
+end, {nargs=0})
