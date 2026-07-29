@@ -4,9 +4,9 @@ return {
   lazy = false,
   priority = 1001,
   config = function()
-    local treesitter_config = require("nvim-treesitter.configs")
+    local treesitter_config = require("nvim-treesitter.config")
     treesitter_config.setup({
-      ensure_installed = {"c","cpp","python","rust","lua", "bash", "javascript", "typescript", "html", "css", "json", "tsx", "svelte", "typst"},
+      ensure_installed = {"c","cpp","python","rust","lua", "bash", "javascript", "typescript", "html", "css", "json", "tsx", "svelte", "typst", "go"},
       highlight = { enable = true },
       indent = { enable = true }, 
     })
