@@ -36,10 +36,10 @@ vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave" }, {
   callback = disable_relnum,
 })
 
--- Define a custom yank highlight group using a color from your theme
+local visual_hl = vim.api.nvim_get_hl(0, { name = "Visual" })
 vim.api.nvim_set_hl(0, "YankHighlight", {
-  bg = vim.api.nvim_get_hl_by_name("Visual", true).background,
-  fg = vim.api.nvim_get_hl_by_name("Visual", true).foreground,
+  bg = visual_hl.bg,
+  fg = visual_hl.fg,
 })
 
 -- Highlight on yank using that group
@@ -64,12 +64,19 @@ vim.api.nvim_create_user_command("Shell", function(opts)
   end
 end, {nargs="?"})
 
--- Create a shorthand for gemini
-vim.api.nvim_create_user_command("Gemini", function(opts)
+local function launch_terminal(buf_name, cmd)
   if #vim.api.nvim_list_wins() > 1 then
-    vim.cmd("terminal gemini")
+    vim.cmd("terminal " .. cmd)
   else
-    vim.cmd("vsplit | terminal gemini")
+    vim.cmd("vsplit | terminal " .. cmd)
   end
-  vim.api.nvim_buf_set_name(0, "gemini")
+  vim.api.nvim_buf_set_name(0, buf_name)
+end
+
+vim.api.nvim_create_user_command("Gemini", function()
+  launch_terminal("gemini", "gemini")
+end, {nargs=0})
+
+vim.api.nvim_create_user_command("Opencode", function()
+  launch_terminal("opencode", "opencode")
 end, {nargs=0})
